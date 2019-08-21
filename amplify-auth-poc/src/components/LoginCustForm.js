@@ -6,10 +6,51 @@ class LoginCustForm extends React.Component {
     super(props);
     this.state = {
       email: "",
-      password: "",
-      username: ""
+      password: ""
     };
   }
+
+  handleSignUp = async event => {
+    event.preventDefault();
+    const { email, password } = this.state;
+    console.log("SIGN UP EVENT");
+    console.log(email[0], password[0]);
+    try {
+      const signUpResponse = await Auth.signUp({
+        username: email[0],
+        password: password[0],
+        attributes: {
+          email: email[0]
+        }
+      });
+      console.log(signUpResponse);
+      this.props.history.push("/home");
+    } catch (error) {
+      // let err = null;
+      // !error.message ? (err = { message: error }) : (err = error);
+      console.log("Error is " + error.message);
+    }
+  };
+
+  handleSignIn = async event => {
+    event.preventDefault();
+    console.log("SIGN IN EVENT");
+    console.log("Email / user name is " + this.state.email.toString());
+    console.log("password is " + this.state.password);
+    try {
+      const user = await Auth.signIn(
+        this.state.email.toString(),
+        this.state.password
+      );
+      console.log(user);
+      this.props.history.push("/home");
+    } catch (error) {
+      // let err = null;
+      // !error.message ? (err = { message: error }) : (err = error);
+      console.log("Error is " + error);
+    }
+  };
+
   render() {
     return (
       <div className="body_content">
@@ -31,78 +72,65 @@ class LoginCustForm extends React.Component {
             </button>
           </div>
           <div className="hr_bar" />
-          <div>
-            <input
-              type="text"
-              name="username"
-              placeholder="username"
-              onChange={e => {
-                e.persist();
-                this.setState({
-                  [e.target.name]: [e.target.value]
-                });
-              }}
-            />
-          </div>
-          <div>
-            <input
-              type="text"
-              name="email"
-              placeholder="email"
-              onChange={e => {
-                e.persist();
-                this.setState({
-                  [e.target.name]: [e.target.value]
-                });
-              }}
-            />
-          </div>
-          <div>
-            <input
-              type="password"
-              name="password"
-              placeholder="password"
-              onChange={e => {
-                e.persist();
-                this.setState({
-                  [e.target.name]: [e.target.value]
-                });
-              }}
-            />
-          </div>
-          <div>
-            <button
-              onClick={() =>
-                signUp(
-                  this.state.username,
-                  this.state.email,
-                  this.state.password
-                )
-              }
-            >
-              Sign up
-            </button>
-          </div>
+          <form>
+            <div>
+              <input
+                className="input-txt"
+                type="text"
+                name="email"
+                placeholder="email"
+                onChange={e => {
+                  e.persist();
+                  this.setState({
+                    [e.target.name]: [e.target.value]
+                  });
+                }}
+              />
+            </div>
+            <div>
+              <input
+                className="input-txt"
+                type="password"
+                name="password"
+                placeholder="password"
+                onChange={e => {
+                  e.persist();
+                  this.setState({
+                    [e.target.name]: [e.target.value]
+                  });
+                }}
+              />
+            </div>
+            <div>
+              <button className="signup-btn" onClick={this.handleSignUp}>
+                Sign Up
+              </button>
+
+              <button className="signin-btn" onClick={this.handleSignIn}>
+                Sign In
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     );
   }
 }
 
-async function signUp(username, email, password) {
-  try {
-    console.log("------email is " + username);
-    console.log("------email is " + email);
-    console.log("-------password is " + password);
-    await Auth.signUp({
-      username: "username",
-      email,
-      password,
-      attributes: { email }
-    });
-    console.log("sign up success!");
-  } catch (err) {
-    console.log("error signing up..", err);
-  }
-}
+// async function signUp(username, email, password) {
+//   try {
+//     console.log("------email is " + username);
+//     console.log("------email is " + email);
+//     console.log("-------password is " + password);
+//     await Auth.signUp({
+//       username: "username",
+//       email,
+//       password,
+//       attributes: { email }
+//     });
+//     console.log("sign up success!");
+//   } catch (err) {
+//     console.log("error signing up..", err);
+//   }
+// }
 export default LoginCustForm;
