@@ -1,5 +1,9 @@
+body {
+  background-color: teal;
+}
 .App {
   text-align: center;
+  background-color: teal;
 }
 
 .App-header {
@@ -8,4 +12,8 @@
   padding: 2% 0% 0% 80%;
   font-size: 20px;
   color: white;
+}
+
+.App-div {
+  cursor: pointer;
 }
