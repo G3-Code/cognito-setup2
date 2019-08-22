@@ -135,3 +135,17 @@ body {
   width: 200px;
   height: 30px;
 }
+
+.welcome-user {
+  color: white;
+  margin-top: 30px;
+  margin-left: 30px;
+}
+
+.logout-btn {
+  margin-left: 80%;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 16px;
+}

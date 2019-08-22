@@ -43,10 +43,30 @@ class LoginCustForm extends React.Component {
         this.state.password
       );
       console.log(user);
+      this.props.auth.setAuthStatus(true);
+      console.log("auth status is set");
+      this.props.auth.setUser(user);
+      console.log("user is set");
       this.props.history.push("/home");
     } catch (error) {
       // let err = null;
       // !error.message ? (err = { message: error }) : (err = error);
+      console.log("Error is " + error.message);
+    }
+  };
+
+  handleGoogleSignIn = async event => {
+    event.preventDefault();
+    try {
+      console.log("IN GOOGLE SIGN IN ");
+      await Auth.federatedSignIn({ provider: "Google" });
+      // console.log(user);
+      // this.props.auth.setAuthStatus(true);
+      // console.log("auth status is set");
+      // this.props.auth.setUser(user);
+      // console.log("user is set");
+      // this.props.history.push("/home");
+    } catch (error) {
       console.log("Error is " + error);
     }
   };

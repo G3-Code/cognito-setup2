@@ -23,30 +23,63 @@ class App extends React.Component {
       user: user
     });
   };
+
+  async componentDidMount() {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      console.log(user);
+      if (user) {
+        this.setAuthStatus(true);
+        this.setUser(user);
+      } else {
+        this.setAuthStatus(false);
+        this.setUser(null);
+      }
+    } catch (error) {
+      console.log("Error in CDM is " + error);
+    }
+  }
+
   render() {
     const authProps = {
       isAuthenticated: this.state.isAuthenticated,
       user: this.state.user,
-      setAuthStatus: this.state.setAuthStatus,
-      setUser: this.state.setUser
+      setAuthStatus: this.setAuthStatus,
+      setUser: this.setUser
     };
     return (
       <Router>
         <div className="App">
-          <header className="App-header">
-            <div className="login_link" onClick={() => Auth.federatedSignIn()}>
-              Login-default-customized
-            </div>
-            <NavLink to="/login" className="login_link">
-              Login with buttons
-            </NavLink>
-            <NavLink to="/loginCust" className="login_link">
-              Login custom
-            </NavLink>
+          <header>
+            {!authProps.isAuthenticated && (
+              <div className="App-header">
+                <div
+                  className="login_link"
+                  onClick={() => Auth.federatedSignIn()}
+                >
+                  Login-default-customized
+                </div>
+                <NavLink to="/login" className="login_link">
+                  Login with buttons
+                </NavLink>
+                <NavLink to="/loginCust" className="login_link">
+                  Login custom
+                </NavLink>
+              </div>
+            )}
           </header>
         </div>
-        <Route exact path="/login" component={LoginForm} />
-        <Route exact path="/loginCust" component={LoginCustForm} />
+
+        <Route
+          exact
+          path="/login"
+          render={props => <LoginForm {...props} auth={authProps} />}
+        />
+        <Route
+          exact
+          path="/loginCust"
+          render={props => <LoginCustForm {...props} auth={authProps} />}
+        />
         <Route
           exact
           path="/home"
